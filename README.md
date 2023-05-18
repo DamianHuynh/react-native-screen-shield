@@ -5,7 +5,7 @@ Prevent Screenshot Image in your iOS/Android app.
 ## Installation
 
 ```sh
-npm install react-native-screen-shield
+yarn add react-native-screen-shield
 ```
 
 ## Usage
@@ -15,7 +15,9 @@ import { ScreenShieldView } from "react-native-screen-shield";
 
 // ...
 
-<ScreenShieldView color="tomato" />
+<ScreenShieldView>
+  {* your code *}
+</ScreenShieldView>
 ```
 
 ## Contributing
