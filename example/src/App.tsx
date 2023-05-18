@@ -5,9 +5,9 @@ import { ScreenShieldView } from 'react-native-screen-shield';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <ScreenShieldView color="#32a852" style={styles.box} />
-    </View>
+    <ScreenShieldView style={styles.container}>
+      <View style={styles.box} />
+    </ScreenShieldView>
   );
 }
 
@@ -21,5 +21,6 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginVertical: 20,
+    backgroundColor: '#bbf',
   },
 });

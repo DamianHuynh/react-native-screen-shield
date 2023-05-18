@@ -1,9 +1,7 @@
-import {
-  requireNativeComponent,
-  UIManager,
-  Platform,
-  ViewStyle,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { NativeModules } from 'react-native';
+import { View, ViewProps } from 'react-native';
+import { requireNativeComponent, UIManager, Platform } from 'react-native';
 
 const LINKING_ERROR =
   `The package 'react-native-screen-shield' doesn't seem to be linked. Make sure: \n\n` +
@@ -11,16 +9,33 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-type ScreenShieldProps = {
-  color: string;
-  style: ViewStyle;
-};
+interface ScreenShieldProps extends ViewProps {}
 
 const ComponentName = 'ScreenShieldView';
+const ScreenShield = NativeModules.ScreenShield
+  ? NativeModules.ScreenShield
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      }
+    );
+
+const AndroidScreenShieldView = (props: ScreenShieldProps) => {
+  useEffect(() => {
+    ScreenShield.enableSecureFlag();
+  }, []);
+
+  return <View {...props} />;
+};
 
 export const ScreenShieldView =
-  UIManager.getViewManagerConfig(ComponentName) != null
-    ? requireNativeComponent<ScreenShieldProps>(ComponentName)
-    : () => {
-        throw new Error(LINKING_ERROR);
-      };
+  Platform.OS === 'ios'
+    ? UIManager.getViewManagerConfig(ComponentName) != null
+      ? requireNativeComponent<ScreenShieldProps>(ComponentName)
+      : () => {
+          throw new Error(LINKING_ERROR);
+        }
+    : AndroidScreenShieldView;
